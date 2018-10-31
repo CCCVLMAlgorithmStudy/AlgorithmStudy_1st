@@ -119,5 +119,6 @@ tags
 # Notepad++ backups #
 *.bak
 
+.DS_Store
 
 # End of https://www.gitignore.io/api/notepadpp
