@@ -18,7 +18,7 @@ int solution(int n, vector<int> stations, int w)
     for(auto i = stations.begin();i!=stations.end();i++){
         int range = (*i - w) - (prevStation + w) - 1;
         
-        if(range >0){
+        if(range > 0){
             answer += (range+coverage-1) / coverage;     
         }
         prevStation = (*i);
@@ -44,6 +44,7 @@ int solution_Conventional(int n, vector<int> stations, int w)
     for(auto i = stations.begin();i!=stations.end();i++){
         if(i == stations.begin()){
             if( 0 >= (*i)-w){
+                PrevStation = (*i);
                 continue;
             }
 
@@ -51,6 +52,7 @@ int solution_Conventional(int n, vector<int> stations, int w)
         }
         else if(i+1 == stations.end()){
             if(PrevStation+w+1>=n){
+                PrevStation = (*i);
                 continue;
             }
             else{
@@ -59,6 +61,7 @@ int solution_Conventional(int n, vector<int> stations, int w)
         }
         else{
             if(PrevStation+w+1>=(*i)-w){
+                 PrevStation = (*i);
                  continue;
             }  
 
