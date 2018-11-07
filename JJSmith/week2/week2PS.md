@@ -67,7 +67,7 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
 ## 2. SetSations
 
 유형 : 구현  
-난이도 : 3/10  
+난이도 : 4/10  
 풀이 :   
 항상 문제를 풀때 반복문의 들어갈 내용이나 증감요소를 생각하면 쉽게 풀 수 있다.   
 이 구현 문제의 핵심은 이미 설치된 스테이션의 정보를 활용해  
