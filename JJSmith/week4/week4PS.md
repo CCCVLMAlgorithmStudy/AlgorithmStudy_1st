@@ -7,66 +7,58 @@
 유형 : 정렬  
 난이도 : 2/10  
 풀이 :  
-쇠 막대기처럼 큐 문제 중에 어려운 편에 속하는 문제.  
+정렬 문제의 기초라고 할 수 있다. A배열 요소와 B배열 요소의 순서별 곱의 최솟값을 구하는 문제인데
+조건은 B배열의 요소의 순서를 건들지 않고 A배열을 요소의 순을 바꿔서 최솟값을 구하라고 한다.
+
+결국 구하는 건 B요소의 최대값에 A요소의 최솟값을 곱하는 식으로 역 순의 배열의 곱을 구하면 구하고자 하는 최솟값이 나오므로
+B배열 요소를 바꾸지 말라했으면 새로운 자료구조를 만들어 정렬 후 곱하면 된다. 따라서 우선순위 큐(Min Heap과 Max Heap)를 만들어
+곱해 최솟값을 구했다.
   
-시간을 구하는 문제이므로 시간 단위로 상황 변화를 생각해보면 조금씩 실마리가 보이는 문제다.  
-주요 자료구조로는 다리 위에 지나가는 트럭을 pair로 (트럭의 무게, 도착시간)이 담긴 트럭의 정보를 저장했다.  
-  
-이 때 생각없이 풀어서 다리에 트럭이 들어갈때마다 트럭을 지우는 비효율적인 방법을 선택했다.  
-반복문에서 시간을 1씩 늘리고, FIFO구조이므로 pair의 첫번째 항목의 도착시간이 됬을때. 
-다리여유무게 회복하게 하였다.  
-  
-걸리는 시간만큼 반복문 돌기 때문에 트럭의 갯수가 n이고 다리의 길이가 m이라고 했을 때  
-최악의 시간은 n* m   
-따라서 시간복잡도는 O(n+ m) 에서 O(n* m) 사이 정도된다.  
+배열의 크기 N만큼 도는 포문 3번이 전부 3n 시간복잡도는 O(n)
   
 ```C++
 #include <vector>
+#include <queue>
+#include <iostream>
 
 using namespace std;
 
-int solution(int bridge_length, int weight, vector<int> truck_weights) {
-    int answer = 0;
-    int tSize= truck_weights.size();
-    vector<pair<int,int>> inBrg;
-    int leftw;
-    int ableBrg;
-    
-    answer++;
-    inBrg.push_back(make_pair(truck_weights[0],answer+bridge_length));
-    leftw = weight- truck_weights[0];
-    ableBrg = bridge_length-1;
-    truck_weights.erase(truck_weights.begin());
-        
-    while(!(truck_weights.empty()&&inBrg.empty())) {
-        if(inBrg[0].second==answer) {
-            leftw+=inBrg[0].first;
-            ableBrg+=1;
-            inBrg.erase(inBrg.begin());
-        }
-        
-        if(truck_weights.empty()&&inBrg.empty()) break;
-        
-        if(!truck_weights.empty()&&answer!=1) {
-            if(ableBrg>0&&leftw-truck_weights[0]>=0) {
-            leftw-=truck_weights[0]; 
-            ableBrg-=1;
-            inBrg.push_back(make_pair(truck_weights[0],answer+bridge_length));
-            truck_weights.erase(truck_weights.begin());
-            }
-        }
-        answer++;
-    }
-    
-    return answer;
+int main() {
+	int N, min=0;
+	priority_queue<int> sortA;
+	priority_queue<int,vector<int>, greater<int> > sortB;
+	
+	cin>>N;
+	
+	int A[N],B[N];
+	
+	for(int i=0; i<N; i++) {
+		cin>>A[i];
+		sortA.push(A[i]);
+	}
+	
+	for(int i=0; i<N; i++) {
+		cin>>B[i];
+		sortB.push(B[i]);
+	}
+	
+	for(int i=0; i<N; i++) {
+		min+=sortA.top()*sortB.top();
+		sortA.pop();
+		sortB.pop();
+	}
+	
+	cout<<min<<endl;
+	
+	return 0;
 }
 ```
 
 
 
-## 2. SetSations
+## 2. WordSort
 
-유형 : 구현  
+유형 : 구현, 정렬   
 난이도 : 4/10  
 풀이 :   
 항상 문제를 풀때 반복문의 들어갈 내용이나 증감요소를 생각하면 쉽게 풀 수 있다.   
