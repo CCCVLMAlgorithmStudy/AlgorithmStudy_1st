@@ -5,7 +5,7 @@
 ## 1. Treasure
 
 유형 : 정렬  
-난이도 : 2/10  
+난이도 : 1/10  
 풀이 :  
 정렬 문제의 기초라고 할 수 있다. A배열 요소와 B배열 요소의 순서별 곱의 최솟값을 구하는 문제인데
 조건은 B배열의 요소의 순서를 건들지 않고 A배열을 요소의 순을 바꿔서 최솟값을 구하라고 한다.
@@ -58,49 +58,57 @@ int main() {
 
 ## 2. WordSort
 
-유형 : 구현, 정렬   
-난이도 : 4/10  
+유형 : 문자열, 정렬   
+난이도 : 2/10  
 풀이 :   
-항상 문제를 풀때 반복문의 들어갈 내용이나 증감요소를 생각하면 쉽게 풀 수 있다.   
-이 구현 문제의 핵심은 이미 설치된 스테이션의 정보를 활용해  
-반복문 안에 들어갈 조건을 생각하는 것이다.  
+랜덤 순 중복 가능한 단어를 제거 후 길이 우선 사전 순(오름차순) 정렬하는 문제다.
+정렬 문제의 확장판으로 중복제거를 위해 나는 Set이라는 자료구조를 사용했다.
+정렬은 Set으로도 좀 되고, 길이가 우선이기에 cmp(사용자 정의 정렬함수)를 만들어
+길이 우선, 사전 순 정렬을 헀다.
   
-스테이션의 중심에서 퍼지는 값을 빼면 터지지 않는 곳의 경계점이고 퍼지는 값을  
-더해주면 오른쪽의 터지지 않는 곳의 경계점을 찾을 수 있다.  
-여기서 스테이션을 왼쪽부터 찾아가면서 경계점을 통해서 터지지않는 영역을 구해  
-스테이션 광역범위로 나눠주면 설치갯수를 구할 수 있다. 단, 터지는 곳에 설치된 스테이션의 경우를  
-잡아줘야 하는데 그 경우에는 설치프로세스를 건너뛰고, 오른쪽의 경계점만 리뉴얼 시킨다.  
-  
-여기서 반복해서 사용하는 값들은 변수에 넣어 재참조가 안되게 했다.  
-  
-시간복잡도는 스테이션의 갯수의 두배 만큼 반복하므로 정비례 O(n)이다.
+시간복잡도는 퀵 정렬(Sort함수)를 썼기 때문에 O(nLogn)이다.
 
 ```C++
 #include <vector>
+#include <string>
+#include <iostream>
+#include <set>
+#include <algorithm>
 
 using namespace std;
 
-int solution(int n, vector<int> stations, int w)
-{
-    int answer = 0, sSize=stations.size(), pos, pre=1, able=w*2+1, area;
+int cmp(const string& a, const string& b) {
+	if(a.length()==b.length()) return a<b;
+	return a.length()<b.length();
+}
 
-    for(int i=0; i<sSize; i++) {
-        pos = stations[i];
-        if(pre+w<pos) {
-            area = ((pos-w) - pre); 
-            if(area%able!=0) answer++;
-            answer += area/able;
-        }
-        pre = pos+w+1;
-    }
-    
-    if(pre-1<n) { 
-        area = n-(pre-1);
-        if(area%able!=0) answer++;
-        answer += area/able;
-    }
-
-    return answer;
+int main() {
+	int N;
+	string str;
+	
+	cin>>N;
+	
+	set<string> uni;
+	vector<string> res;
+	
+	for(int i=0; i<N; i++) {
+		cin>>str;
+		uni.insert(str);
+	}
+	
+	set<string>::iterator it;
+	
+	for(it=uni.begin(); it!=uni.end(); it++) {
+		res.push_back(*it);
+	}
+	
+	sort(res.begin(), res.end(), cmp);
+	
+	for(int i=0; i<res.size(); i++) {
+		cout<<res[i]<<endl;
+	}
+	
+	return 0;
 }
 ```
 
