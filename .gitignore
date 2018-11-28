@@ -122,3 +122,4 @@ tags
 .DS_Store
 
 # End of https://www.gitignore.io/api/notepadpp
+\.DS_Store
